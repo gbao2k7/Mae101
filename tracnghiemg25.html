@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi trắc nghiệm G25 - Rate of Change</title>
+    
+    <!-- Google Fonts cho giao diện hiện đại -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Load MathJax for rendering math formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --bg-gradient-start: #f8fafc;
+            --bg-gradient-end: #e0f2fe;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --card-bg: #ffffff;
+            
+            --correct-bg: #f0fdf4;
+            --correct-border: #22c55e;
+            --correct-text: #15803d;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #b91c1c;
+            
+            --badge-theory: #a855f7;
+            --badge-easy: #22c55e;
+            --badge-med: #f59e0b;
+            --badge-hard: #ef4444;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-main);
+            margin: 0;
+            padding: 30px 15px;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            border-top: 8px solid var(--primary);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #bae6fd;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .intro-box {
+            background-color: #f0f9ff;
+            border-left: 5px solid #0ea5e9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+        }
+
+        .intro-box h3 {
+            margin-top: 0;
+            color: #0369a1;
+            font-size: 1.3em;
+        }
+
+        .score-board {
+            position: sticky;
+            top: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.3em;
+            width: fit-content;
+            margin: 0 auto 40px auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .score-board:hover {
+            transform: translateY(-3px);
+        }
+
+        .question-box {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .question-box:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 1.25em;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            color: white;
+            margin-right: 12px;
+            font-weight: 700;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .diff-Lý { background-color: var(--badge-theory); }
+        .diff-Dễ { background-color: var(--badge-easy); }
+        .diff-Trung { background-color: var(--badge-med); }
+        .diff-Khó { background-color: var(--badge-hard); }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: #f8fafc;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+        }
+
+        .option::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            margin-right: 15px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            background-color: #e0f2fe;
+            border-color: #7dd3fc;
+            color: var(--primary-hover);
+        }
+
+        .option:hover::before {
+            border-color: var(--primary);
+            background-color: #bae6fd;
+        }
+
+        .option.correct {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text);
+            pointer-events: none;
+        }
+        .option.correct::before {
+            background-color: var(--correct-border);
+            border-color: var(--correct-border);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 70%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .option.wrong {
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text);
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .option.wrong::before {
+            background-color: var(--wrong-border);
+            border-color: var(--wrong-border);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+            background-size: 70%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            display: none;
+            background-color: #f1f5f9;
+            border-left: 6px solid var(--primary);
+            animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .feedback h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exp-text {
+            font-size: 1.05em;
+            color: #334155;
+        }
+
+        .tip {
+            font-style: normal;
+            background: linear-gradient(to right, #fffbeb, #fef3c7);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #f59e0b;
+            font-weight: 600;
+            color: #92400e;
+            box-shadow: 0 2px 5px rgba(245, 158, 11, 0.1);
+        }
+        
+        .tip strong {
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <h1>🎯 Chủ Đề G25: Tốc Độ Thay Đổi</h1>
+        <h3 style="color: var(--text-muted); font-weight: 600;">(Rate of Change - Đạo Hàm Ứng Dụng Level 1)</h3>
+    </div>
+
+    <div class="intro-box">
+        <h3>💡 Giới Thiệu Dạng Bài Rate of Change</h3>
+        <p><strong>Bản chất:</strong> Tốc độ thay đổi (Rate of Change) mô tả một biến lượng thay đổi nhanh hay chậm so với một biến lượng khác. Bản chất toán học của tốc độ thay đổi tức thời tại một điểm chính là <b>Đạo hàm bậc một</b> của hàm số tại điểm đó.</p>
+        <p><strong>Sự khác biệt cốt lõi:</strong>
+        <br>• <b>Tốc độ thay đổi trung bình</b> trên đoạn \([a, b]\): Tính bằng công thức \(\frac{f(b) - f(a)}{b - a}\) (Độ dốc của cát tuyến).
+        <br>• <b>Tốc độ thay đổi tức thời</b> tại thời điểm \(x_0\): Tính bằng đạo hàm \(f'(x_0)\) (Độ dốc của tiếp tuyến).
+        <br>• Ứng dụng phổ biến nhất là bài toán vật lý: Hàm vị trí \(s(t) \rightarrow\) Đạo hàm bậc 1 là Vận tốc \(v(t) \rightarrow\) Đạo hàm bậc 2 là Gia tốc \(a(t)\).</p>
+    </div>
+    
+    <div class="score-board" id="scoreBoard">Điểm Của Bạn: 0 / 20</div>
+    
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const quizData = [
+        // LÝ THUYẾT (5 CÂU)
+        {
+            q: "Ý nghĩa hình học trực quan nhất của Tốc độ thay đổi tức thời của hàm số \( y = f(x) \) tại điểm \( x_0 \) là gì?",
+            options: ["Độ dài của đoạn thẳng nối từ gốc tọa độ đến điểm đó", "Độ dốc (slope) của đường tiếp tuyến với đồ thị tại điểm đó", "Diện tích hình phẳng nằm dưới đồ thị", "Độ dốc của đường cát tuyến cắt đồ thị tại hai điểm"],
+            ans: 1, type: "Lý thuyết",
+            exp: "Đạo hàm \(f'(x_0)\) đại diện cho tốc độ thay đổi tức thời của hàm số, đồng thời về mặt hình học nó chính là hệ số góc (độ dốc) của đường tiếp tuyến tại điểm đó.",
+            tip: "Cứ nghe thấy 'tức thời' (instantaneous) nghĩa là Đạo hàm = Tiếp tuyến."
+        },
+        {
+            q: "Để tính tốc độ thay đổi TRUNG BÌNH của hàm số \( f(x) \) khi \( x \) thay đổi từ \( a \) sang \( b \), ta dùng công thức nào?",
+            options: ["\\( f'(b) - f'(a) \\)", "\\( \\frac{f(b) - f(a)}{b - a} \\)", "\\( f'(a) \\cdot (b - a) \\)", "\\( \\frac{f'(b) + f'(a)}{2} \\)"],
+            ans: 1, type: "Lý thuyết",
+            exp: "Tốc độ thay đổi trung bình bằng tỉ số giữa độ biến thiên của hàm số \(\Delta y = f(b) - f(a)\) và độ biến thiên của đối số \(\Delta x = b - a\).",
+            tip: "Trung bình = Chia tỉ lệ đại lượng biến thiên, không cần tính đạo hàm!"
+        },
+        {
+            q: "Mối quan hệ giữa hàm vị trí \( s(t) \), vận tốc \( v(t) \) và gia tốc \( a(t) \) của một vật chuyển động thẳng tuân theo quy luật nào?",
+            options: ["\\( s(t) = v'(t) \\) và \\( v(t) = a'(t) \\)", "\\( v(t) = s'(t) \\) và \\( a(t) = v'(t) = s''(t) \\)", "\\( a(t) = s'(t) \\) và \\( v(t) = a''(t) \\)", "\\( v(t) = \\frac{s(t)}{t} \\) và \\( a(t) = \\frac{v(t)}{t} \\)"],
+            ans: 1, type: "Lý thuyết",
+            exp: "Vận tốc là tốc độ thay đổi của vị trí theo thời gian: \(v(t) = s'(t)\). Gia tốc là tốc độ thay đổi của vận tốc theo thời gian: \(a(t) = v'(t) = s''(t)\).",
+            tip: "Vị trí \(\\xrightarrow{\\text{Đạo hàm}}\) Vận tốc \(\\xrightarrow{\\text{Đạo hàm}}\) Gia tốc."
+        },
+        {
+            q: "Nếu đơn vị của vị trí \( s \) là mét (m) và thời gian \( t \) là giây (s), thì đơn vị đo tương ứng của tốc độ thay đổi của vận tốc theo thời gian (gia tốc) là gì?",
+            options: ["\\( \\text{m} \\cdot \\text{s} \\)", "\\( \\text{m/s} \\)", "\\( \\text{m/s}^2 \\)", "\\( \\text{m}^2\\text{/s} \\)"],
+            ans: 2, type: "Lý thuyết",
+            exp: "Vận tốc có đơn vị là m/s. Gia tốc là tốc độ thay đổi của vận tốc theo thời gian, nên đơn vị là \(\\text{(m/s)/s} = \\text{m/s}^2\).",
+            tip: "Đạo hàm thêm một lần theo \(t\) thì mẫu số đơn vị sẽ tăng thêm một bậc lũy thừa của giây (s)."
+        },
+        {
+            q: "Trong kinh tế học ứng dụng toán, khái niệm \"Chi phí biên\" (Marginal Cost) bản chất là tốc độ thay đổi của hàm tổng chi phí \( C(x) \) theo số lượng sản phẩm \( x \). Khẳng định nào sau đây đúng?",
+            options: ["Marginal Cost = \\( C(x)/x \\)", "Marginal Cost = \\( C'(x) \\)", "Marginal Cost = \\( C(x+1) + C(x) \\)", "Marginal Cost = \\( \\int C(x)dx \\)"],
+            ans: 1, type: "Lý thuyết",
+            exp: "Chi phí biên là tốc độ thay đổi tức thời của chi phí khi sản xuất thêm một đơn vị sản phẩm, được tính bằng đạo hàm bậc nhất của hàm tổng chi phí: \(MC = C'(x)\).",
+            tip: "Từ khóa 'Biên' (Marginal) trong toán kinh tế luôn có nghĩa là lấy Đạo hàm bậc 1."
+        },
+
+        // BÀI TẬP DỄ (5 CÂU)
+        {
+            q: "Một vật chuyển động có phương trình vị trí \( s(t) = t^2 - 4t + 5 \) (m, s). Hãy tìm vận tốc tức thời của vật tại thời điểm \( t = 3 \\text{ s} \).",
+            options: ["\\( 1 \\text{ m/s} \\)", "\\( 2 \\text{ m/s} \\)", "\\( 5 \\text{ m/s} \\)", "\\( -2 \\text{ m/s} \\)"],
+            ans: 1, type: "Bài tập - Dễ",
+            exp: "Vận tốc tức thời \(v(t) = s'(t) = 2t - 4\). Tại \(t = 3\), ta có \(v(3) = 2(3) - 4 = 2 \\text{ m/s}\).",
+            tip: "Đạo hàm đa thức cơ bản rồi thế số \(t\)."
+        },
+        {
+            q: "Tính tốc độ thay đổi của diện tích hình tròn \( A = \\pi r^2 \) theo bán kính \( r \) tại vị trí bán kính \( r = 4\\text{ cm} \).",
+            options: ["\\( 4\\pi \\text{ cm} \\)", "\\( 8\\pi \\text{ cm} \\)", "\\( 16\\pi \\text{ cm} \\)", "\\( 2\\pi \\text{ cm} \\)"],
+            ans: 1, type: "Bài tập - Dễ",
+            exp: "Tốc độ thay đổi của \(A\) theo \(r\) chính là đạo hàm của \(A\) theo biến \(r\): \(\\frac{dA}{dr} = 2\\pi r\). Khi \(r = 4\), \(\\frac{dA}{dr} = 2\\pi(4) = 8\\pi\).",
+            tip: "Lưu ý bài toán yêu cầu tìm tốc độ thay đổi theo R (bán kính) chứ không phải theo thời gian \(t\), nên không nhân thêm đuôi \(dr/dt\)."
+        },
+        {
+            q: "Một quần thể vi khuẩn phát triển theo thời gian \( t \) (giờ) có số lượng cá thể tuân theo hàm số \( P(t) = 500 + 50t^2 \). Tốc độ tăng trưởng của vi khuẩn tại thời điểm \( t = 2 \) giờ là bao nhiêu?",
+            options: ["\\( 500 \\text{ vi khuẩn/giờ} \\)", "\\( 100 \\text{ vi khuẩn/giờ} \\)", "\\( 200 \\text{ vi khuẩn/giờ} \\)", "\\( 700 \\text{ vi khuẩn/giờ} \\)"],
+            ans: 2, type: "Bài tập - Dễ",
+            exp: "Tốc độ tăng trưởng tức thời \(P'(t) = 100t\). Tại \(t = 2\), ta có \(P'(2) = 100(2) = 200 \\text{ vi khuẩn/giờ}\).",
+            tip: "Hằng số 500 đạo hàm bằng 0, chỉ cần hạ bậc \(50t^2\) thành \(100t\)."
+        },
+        {
+            q: "Nhiệt độ của một vật thể kim loại sau \( t \) phút nung nóng tăng theo phương trình \( T(t) = 30 + 4t^2 \) (°C). Hỏi tốc độ thay đổi nhiệt độ tức thời tại phút thứ \( t = 5 \) là bao nhiêu?",
+            options: ["\\( 40 \\text{ }^\\circ\\text{C/phút} \\)", "\\( 20 \\text{ }^\\circ\\text{C/phút} \\)", "\\( 130 \\text{ }^\\circ\\text{C/phút} \\)", "\\( 8 \\text{ }^\\circ\\text{C/phút} \\)"],
+            ans: 0, type: "Bài tập - Dễ",
+            exp: "Đạo hàm nhiệt độ theo thời gian: \(T'(t) = 8t\). Tại \(t = 5\), ta có \(T'(5) = 8(5) = 40 \\text{ }^\circ\\text{C/phút}\).",
+            tip: "Tốc độ thay đổi nhiệt độ chính là đạo hàm của hàm nhiệt độ."
+        },
+        {
+            q: "Tìm gia tốc tức thời tại thời điểm \( t = 2\\text{ s} \) của một chất điểm chuyển động có hàm vận tốc \( v(t) = 3t^2 - t + 2 \) (m/s).",
+            options: ["\\( 11 \\text{ m/s}^2 \\)", "\\( 12 \\text{ m/s}^2 \\)", "\\( 13 \\text{ m/s}^2 \\)", "\\( 14 \\text{ m/s}^2 \\)"],
+            ans: 0, type: "Bài tập - Dễ",
+            exp: "Gia tốc là đạo hàm của vận tốc: \(a(t) = v'(t) = 6t - 1\). Tại \(t = 2\), \(a(2) = 6(2) - 1 = 11 \\text{ m/s}^2\).",
+            tip: "Bài đã cho sẵn hàm vận tốc \(v(t)\), chỉ cần đạo hàm 1 lần là ra hàm gia tốc."
+        },
+
+        // BÀI TẬP TRUNG BÌNH (5 CÂU)
+        {
+            q: "Một vật chuyển động thẳng có phương trình vị trí \( s(t) = t^3 - 6t^2 + 9t \) (m, s). Tại thời điểm nào thì vật dừng lại (vận tốc bằng 0)?",
+            options: ["\\( t = 1\\text{ s} \\) và \\( t = 3\\text{ s} \\)", "\\( t = 3\\text{ s} \\) và \\( t = 4\\text{ s} \\)", "\\( t = 0\\text{ s} \\)", "\\( t = 2\\text{ s} \\)"],
+            ans: 0, type: "Bài tập - Trung bình",
+            exp: "Vận tốc \(v(t) = s'(t) = 3t^2 - 12t + 9\). Để vật dừng lại, cho \(v(t) = 0 \\Rightarrow 3t^2 - 12t + 9 = 0\). Chia cả hai vế cho 3: \(t^2 - 4t + 3 = 0 \\Rightarrow t = 1\) hoặc \(t = 3\).",
+            tip: "Vật dừng lại khi phương trình đạo hàm bậc nhất bằng 0. Giải phương trình bậc 2 tìm nghiệm."
+        },
+        {
+            q: "Một quả bóng được đá thẳng đứng lên trời từ mặt đất, độ cao đạt được sau \( t \) giây là \( h(t) = -5t^2 + 30t \) (m). Tính độ cao lớn nhất mà quả bóng có thể đạt được.",
+            options: ["\\( 30\\text{ m} \\)", "\\( 45\\text{ m} \\)", "\\( 60\\text{ m} \\)", "\\( 15\\text{ m} \\)"],
+            ans: 1, type: "Bài tập - Trung bình",
+            exp: "Quả bóng đạt độ cao lớn nhất khi nó đạt đỉnh, tại đó vận tốc bằng 0: \(v(t) = h'(t) = -10t + 30 = 0 \\Rightarrow t = 3\\text{ s}\). Thay \(t = 3\) vào hàm độ cao ban đầu: \(h(3) = -5(3^2) + 30(3) = -45 + 90 = 45\\text{ m}\).",
+            tip: "Điểm cao nhất = Vận tốc bằng 0. Tìm thời gian \(t\) trước rồi thế ngược lại tính chiều cao \(h\)."
+        },
+        {
+            q: "Tìm tốc độ thay đổi trung bình của hàm số \( f(x) = x^2 - 3x \) trên đoạn từ \( x = 1 \) đến \( x = 4 \).",
+            options: ["\\( 3 \\)", "\\( 2 \\)", "\\( 5 \\)", "\\( 4 \\)"],
+            ans: 1, type: "Bài tập - Trung bình",
+            exp: "Áp dụng công thức tốc độ thay đổi trung bình: \(\\frac{f(4) - f(1)}{4 - 1}\). Ta có \(f(4) = 4^2 - 3(4) = 4\) và \(f(1) = 1^2 - 3(1) = -2\). Kết quả: \(\\frac{4 - (-2)}{3} = \\frac{6}{3} = 2\).",
+            tip: "Cẩn thận dấu trừ của giá trị âm: \(4 - (-2) = 4 + 2 = 6\)."
+        },
+        {
+            q: "Thể tích khối cầu được tính bằng công thức \( V = \\frac{4}{3}\\pi r^3 \). Tốc độ thay đổi của thể tích theo bán kính \( r \) khi bán kính \( r = 3\\text{ cm} \) là bao nhiêu?",
+            options: ["\\( 12\\pi \\)", "\\( 36\\pi \\)", "\\( 27\\pi \\)", "\\( 9\\pi \\)"],
+            ans: 1, type: "Bài tập - Trung bình",
+            exp: "Tốc độ thay đổi của \(V\) theo \(r\) là đạo hàm \(\\frac{dV}{dr} = 4\\pi r^2\). Tại \(r = 3\), \(\\frac{dV}{dr} = 4\\pi(3^2) = 36\\pi\).",
+            tip: "Đạo hàm thể tích khối cầu theo biến bán kính chính bằng diện tích bề mặt của nó (\(4\\pi r^2\))."
+        },
+        {
+            q: "Doanh thu thu được từ việc bán \( x \) chiếc máy tính được cho bởi hàm số \( R(x) = 2000x - 2x^2 \) (USD). Tìm doanh thu biên (Marginal Revenue) khi công ty bán được chiếc máy tính thứ \( x = 100 \).",
+            options: ["\\( 1600 \\text{ USD} \\)", "\\( 2000 \\text{ USD} \\)", "\\( 1800 \\text{ USD} \\)", "\\( 1500 \\text{ USD} \\)"],
+            ans: 0, type: "Bài tập - Trung bình",
+            exp: "Doanh thu biên là đạo hàm của hàm doanh thu: \(R'(x) = 2000 - 4x\). Tại \(x = 100\), ta được \(R'(100) = 2000 - 4(100) = 1600 \\text{ USD}\).",
+            tip: "Đạo hàm hàm doanh thu rồi thế số lượng sản phẩm \(x\) vào."
+        },
+
+        // BÀI TẬP KHÓ (5 CÂU)
+        {
+            q: "Một người đi bộ dọc theo một con đường thẳng. Khoảng cách của người đó tính từ điểm xuất phát sau thời gian \( t \) phút được xác định bằng công thức \( s(t) = \\sqrt{t^2 + 16} \) (mét). Hãy tính tốc độ thay đổi của khoảng cách tại thời điểm \( t = 3 \) phút.",
+            options: ["\\( 0.6 \\text{ m/phút} \\)", "\\( 0.75 \\text{ m/phút} \\)", "\\( 0.5 \\text{ m/phút} \\)", "\\( 1.2 \\text{ m/phút} \\)"],
+            ans: 0, type: "Bài tập - Khó",
+            exp: "Tốc độ thay đổi khoảng cách là đạo hàm hàm hợp \(\sqrt{u}\): \(s'(t) = \\frac{1}{2\\sqrt{t^2 + 16}} \\cdot (t^2 + 16)' = \\frac{2t}{2\\sqrt{t^2 + 16}} = \\frac{t}{\\sqrt{t^2 + 16}}\). Tại \(t = 3\), ta có \(s'(3) = \\frac{3}{\\sqrt{3^2 + 16}} = \\frac{3}{\\sqrt{25}} = \\frac{3}{5} = 0.6 \\text{ m/phút}\).",
+            tip: "Đạo hàm \(\\sqrt{u}\) bằng \(\\frac{u'}{2\\sqrt{u}}\), triệt tiêu số 2 ở cả tử và mẫu giúp biểu thức gọn hơn."
+        },
+        {
+            q: "Một cái bể chứa nước hình nón úp ngược bị rò rỉ nước ở đáy. Thể tích nước còn lại trong bể sau \( t \) phút là \( V(t) = 20(5 - t)^2 \\text{ cm}^3 \) (\( 0 \\le t \\le 5 \)). Tốc độ nước thoát ra ngoài nhanh nhất tại thời điểm nào?",
+            options: ["\\( t = 5 \\text{ phút} \\)", "\\( t = 0 \\text{ phút} \\)", "\\( t = 2.5 \\text{ phút} \\)", "\\( t = 1 \\text{ phút} \\)"],
+            ans: 1, type: "Bài tập - Khó",
+            exp: "Tốc độ thay đổi thể tích nước trong bể là \(V'(t) = 20 \\cdot 2(5 - t) \\cdot (-1) = -40(5 - t) = 40t - 200\). Tốc độ nước thoát ra ngoài (lấy giá trị tuyệt đối đại lượng dòng chảy) là \(|V'(t)| = 40(5 - t) = 200 - 40t\). Trên đoạn \([0, 5]\), hàm số \(200 - 40t\) đạt giá trị lớn nhất tại \(t = 0\) với giá trị bằng 200 \(\\text{cm}^3\\text{/phút}\).",
+            tip: "Bể đầy nhất ở thời điểm đầu tiên (\(t=0\)), áp suất nước lớn nhất dẫn đến tốc độ rò rỉ nhanh nhất."
+        },
+        {
+            q: "Dòng điện \( I(t) \) chạy qua một mạch điện xoay chiều chính là tốc độ thay đổi tức thời của điện tích \( Q(t) \) chuyển dịch qua mặt cắt dây dẫn theo thời gian (\( I(t) = \\frac{dQ}{dt} \)). Nếu \( Q(t) = 3\\sin(2t) + 4\\cos(2t) \), cường độ dòng điện cực đại bằng bao nhiêu?",
+            options: ["\\( 5 \\)", "\\( 7 \\)", "\\( 10 \\)", "\\( 14 \\)"],
+            ans: 2, type: "Bài tập - Khó",
+            exp: "Tính đạo hàm của \(Q(t)\) để tìm biểu thức dòng điện: \(I(t) = Q'(t) = 3(2\\cos(2t)) + 4(-2\\sin(2t)) = 6\\cos(2t) - 8\\sin(2t)\). Biên độ cực đại của biểu thức dạng \(A\\cos(\omega t) + B\\sin(\omega t)\) là \(\\sqrt{A^2 + B^2}\). Do đó, \(I_{\\text{max}} = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10\).",
+            tip: "Nhớ nhân thêm \(\\omega = 2\) của hàm hợp lượng giác \(\\sin(2t), \\cos(2t)\) ra ngoài trước khi tính biên độ Pytago."
+        },
+        {
+            q: "Tìm điểm \( x \) trên đồ thị hàm số \( f(x) = \\frac{x^2}{x - 1} \) (\( x > 1 \)) mà tại đó tốc độ thay đổi của hàm số theo \( x \) bằng 0.",
+            options: ["\\( x = 3 \\)", "\\( x = 2 \\)", "\\( x = 1.5 \\)", "\\( x = 4 \\)"],
+            ans: 1, type: "Bài tập - Khó",
+            exp: "Tốc độ thay đổi bằng 0 đồng nghĩa với đạo hàm bậc nhất bằng 0. Tính đạo hàm của thương \(\\left(\\frac{u}{v}\\right)'\): \(f'(x) = \\frac{2x(x - 1) - x^2(1)}{(x - 1)^2} = \\frac{2x^2 - 2x - x^2}{(x - 1)^2} = \\frac{x^2 - 2x}{(x - 1)^2}\). Cho tử số bằng 0: \(x^2 - 2x = 0 \\Rightarrow x(x - 2) = 0 \\Rightarrow x = 0\) hoặc \(x = 2\). Vì điều kiện đề bài là \(x > 1\), ta chọn \(x = 2\).",
+            tip: "Đạo hàm phân thức chỉ cần cho tử số bằng 0 để giải tìm nghiệm."
+        },
+        {
+            q: "Một chất điểm dao động điều hòa có phương trình vị trí ly độ là \( s(t) = 5\\cos(2t + \\frac{\\pi}{4}) \) (cm). Khẳng định nào sau đây là ĐÚNG khi nói về tốc độ thay đổi tức thời của gia tốc vật theo thời gian?",
+            options: ["Nó luôn là một hằng số biến thiên tuyến tính", "Nó tỉ lệ thuận với vận tốc của vật", "Nó đạt cực đại khi vật đi qua vị trí cân bằng", "Nó bằng không khi vật ở vị trí biên"],
+            ans: 1, type: "Bài tập - Khó",
+            exp: "Ta có vận tốc \(v(t) = s'(t)\), gia tốc \(a(t) = v'(t) = s''(t) = -4 \cdot 5\\cos(2t+\\frac{\\pi}{4}) = -4s(t)\). Tốc độ thay đổi của gia tốc theo thời gian là đạo hàm bậc 3 của vị trí: \(a'(t) = s'''(t) = -4s'(t) = -4v(t)\). Như vậy, tốc độ thay đổi của gia tốc tỉ lệ thuận với vận tốc \(v(t)\).",
+            tip: "Trong dao động điều hòa, đạo hàm cấp cao hơn sẽ quay vòng lặp dấu và có mối liên hệ tỉ lệ với cấp đạo hàm thấp hơn liền trước."
+        }
+    ];
+
+    let currentScore = 0;
+    let answeredQuestions = 0;
+
+    function renderQuiz() {
+        const container = document.getElementById("quiz-container");
+        let html = "";
+
+        quizData.forEach((item, qIndex) => {
+            let diffClass = "";
+            if(item.type.includes("Lý thuyết")) diffClass = "diff-Lý";
+            else if(item.type.includes("Dễ")) diffClass = "diff-Dễ";
+            else if(item.type.includes("Trung")) diffClass = "diff-Trung";
+            else if(item.type.includes("Khó")) diffClass = "diff-Khó";
+
+            html += `
+                <div class="question-box" id="qbox-${qIndex}">
+                    <div class="question-title">
+                        <span class="difficulty-badge ${diffClass}">${item.type}</span> 
+                        <br><br>Câu ${qIndex + 1}: ${item.q}
+                    </div>
+                    <div class="options">
+            `;
+
+            item.options.forEach((opt, oIndex) => {
+                html += `<div class="option" id="opt-${qIndex}-${oIndex}" onclick="checkAnswer(${qIndex}, ${oIndex})">
+                            <span style="margin-right:10px; font-weight:800;">${String.fromCharCode(65 + oIndex)}.</span> ${opt}
+                         </div>`;
+            });
+
+            html += `
+                    </div>
+                    <div class="feedback" id="feedback-${qIndex}">
+                        <h4><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> Lời giải chi tiết:</h4>
+                        <div class="exp-text">${item.exp}</div>
+                        <div class="tip"><strong>💡 Ghi nhớ nhanh:</strong> ${item.tip}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+        
+        // MathJax typeset
+        if (window.MathJax) {
+            MathJax.typesetPromise().catch((err) => console.log(err.message));
+        }
+    }
+
+    function checkAnswer(qIndex, oIndex) {
+        const box = document.getElementById(`qbox-${qIndex}`);
+        const opts = box.querySelectorAll('.option');
+        if (opts[0].classList.contains('disabled')) return;
+
+        const correctAns = quizData[qIndex].ans;
+
+        if (oIndex === correctAns) {
+            currentScore++;
+        }
+        answeredQuestions++;
+        
+        // Cập nhật điểm có hiệu ứng
+        const scoreBoard = document.getElementById('scoreBoard');
+        scoreBoard.innerText = `Điểm Của Bạn: ${currentScore} / 20`;
+        scoreBoard.style.transform = "scale(1.1)";
+        setTimeout(() => scoreBoard.style.transform = "scale(1)", 200);
+
+        opts.forEach((opt, idx) => {
+            opt.classList.add('disabled');
+            if (idx === correctAns) {
+                opt.classList.add('correct');
+            } else if (idx === oIndex && oIndex !== correctAns) {
+                opt.classList.add('wrong');
+            }
+        });
+
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+        feedback.style.display = 'block';
+        
+        if (window.MathJax) {
+            MathJax.typesetPromise([feedback]).catch((err) => console.log(err.message));
+        }
+    }
+
+    window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
