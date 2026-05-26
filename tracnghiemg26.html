@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi trắc nghiệm G26 - Related Rates</title>
+    
+    <!-- Google Fonts cho giao diện hiện đại -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Load MathJax for rendering math formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-gradient-start: #f8fafc;
+            --bg-gradient-end: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #047857;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #b91c1c;
+            
+            --badge-theory: #8b5cf6;
+            --badge-easy: #10b981;
+            --badge-med: #f59e0b;
+            --badge-hard: #ef4444;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-main);
+            margin: 0;
+            padding: 30px 15px;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-top: 8px solid var(--primary);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #cbd5e1;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .intro-box {
+            background-color: #f0fdfa;
+            border-left: 5px solid #14b8a6;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+        }
+
+        .intro-box h3 {
+            margin-top: 0;
+            color: #0f766e;
+            font-size: 1.3em;
+        }
+
+        .score-board {
+            position: sticky;
+            top: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.3em;
+            width: fit-content;
+            margin: 0 auto 40px auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .score-board:hover {
+            transform: translateY(-3px);
+        }
+
+        .question-box {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .question-box:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 1.25em;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            color: white;
+            margin-right: 12px;
+            font-weight: 700;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .diff-Lý { background-color: var(--badge-theory); }
+        .diff-Dễ { background-color: var(--badge-easy); }
+        .diff-Trung { background-color: var(--badge-med); }
+        .diff-Khó { background-color: var(--badge-hard); }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: #f8fafc;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+        }
+
+        .option::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            margin-right: 15px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            background-color: #e0e7ff;
+            border-color: #a5b4fc;
+            color: var(--primary-hover);
+        }
+
+        .option:hover::before {
+            border-color: var(--primary);
+            background-color: #c7d2fe;
+        }
+
+        .option.correct {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text);
+            pointer-events: none;
+        }
+        .option.correct::before {
+            background-color: var(--correct-border);
+            border-color: var(--correct-border);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 70%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .option.wrong {
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text);
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .option.wrong::before {
+            background-color: var(--wrong-border);
+            border-color: var(--wrong-border);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+            background-size: 70%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            display: none;
+            background-color: #f1f5f9;
+            border-left: 6px solid var(--primary);
+            animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .feedback h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exp-text {
+            font-size: 1.05em;
+            color: #334155;
+        }
+
+        .tip {
+            font-style: normal;
+            background: linear-gradient(to right, #fffbeb, #fef3c7);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #f59e0b;
+            font-weight: 600;
+            color: #92400e;
+            box-shadow: 0 2px 5px rgba(245, 158, 11, 0.1);
+        }
+        
+        .tip strong {
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <h1>🎯 Chủ Đề G26: Tỉ Lệ Liên Quan</h1>
+        <h3 style="color: var(--text-muted); font-weight: 600;">(Related Rates - Đạo Hàm Ứng Dụng)</h3>
+    </div>
+
+    <div class="intro-box">
+        <h3>💡 Giới Thiệu Dạng Bài Related Rates</h3>
+        <p><strong>Bản chất:</strong> Trong thực tế, khi một đại lượng thay đổi theo thời gian, nó thường kéo theo sự thay đổi của các đại lượng khác liên quan đến nó. Ví dụ: khi rót nước vào phễu, thể tích tăng thì chiều cao mực nước cũng tăng theo.</p>
+        <p><strong>4 Bước Vàng để giải:</strong>
+        <br>1. Đọc đề, vẽ hình và gán biến số (chỉ gán biến cho đại lượng có thay đổi, giữ nguyên hằng số).
+        <br>2. Tìm một <b>Phương trình toán học</b> liên kết các biến số đó (Pytago, Thể tích, Lượng giác...).
+        <br>3. Áp dụng <b>Quy tắc chuỗi (Chain Rule)</b> để lấy đạo hàm hai vế theo thời gian \( t \).
+        <br>4. <b>Mới được thay số</b> vào biểu thức đã đạo hàm để tìm ra đáp án cuối cùng.</p>
+    </div>
+    
+    <div class="score-board" id="scoreBoard">Điểm Của Bạn: 0 / 20</div>
+    
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const quizData = [
+        // LÝ THUYẾT (5 CÂU)
+        {
+            q: "Kỹ thuật tính đạo hàm cốt lõi nào được sử dụng để giải hầu hết các bài toán Tỉ lệ liên quan (Related Rates)?",
+            options: ["Quy tắc L'Hôpital", "Quy tắc chuỗi (Chain Rule) đạo hàm theo thời gian t", "Tích phân từng phần", "Đạo hàm theo biến không gian x"],
+            ans: 1, type: "Lý thuyết",
+            exp: "Trong bài toán Tỉ lệ liên quan, mọi biến số (như chiều cao \(h\), bán kính \(r\), khoảng cách \(x\)) đều được xem là hàm của thời gian \(t\). Để đạo hàm một phương trình theo \(t\), ta bắt buộc phải dùng Quy tắc chuỗi (Chain Rule).",
+            tip: "Luôn nhớ nhân thêm cái đuôi \(\\frac{dx}{dt}, \\frac{dy}{dt}, \\frac{dh}{dt}\) sau khi lấy đạo hàm các biến tương ứng."
+        },
+        {
+            q: "Sai lầm cực kỳ phổ biến và nghiêm trọng nhất học sinh thường mắc phải khi giải bài Related Rates là gì?",
+            options: ["Vẽ sai hình minh họa", "Thay số liệu của các đại lượng ĐANG THAY ĐỔI vào phương trình TRƯỚC KHI lấy đạo hàm", "Quên mất công thức Pytago", "Không sử dụng đơn vị đo lường"],
+            ans: 1, type: "Lý thuyết",
+            exp: "Nếu bạn thay giá trị cụ thể của biến vào trước khi đạo hàm, biến đó sẽ biến thành hằng số. Đạo hàm của hằng số bằng 0, dẫn đến mất luôn tốc độ thay đổi của nó trong phương trình.",
+            tip: "CHỈ thay số sau khi đã đạo hàm xong hai vế theo thời gian \(t\)."
+        },
+        {
+            q: "Giả sử thể tích hình trụ là \( V = \\pi r^2 h \). Nếu CẢ bán kính \(r\) và chiều cao \(h\) đều đang thay đổi theo thời gian \(t\), đạo hàm hai vế theo \(t\) ta được công thức nào?",
+            options: ["\\( \\frac{dV}{dt} = 2\\pi r \\frac{dh}{dt} \\)", "\\( \\frac{dV}{dt} = \\pi (2r \\frac{dr}{dt} h + r^2 \\frac{dh}{dt}) \\)", "\\( \\frac{dV}{dt} = \\pi r^2 \\frac{dh}{dt} \\)", "\\( \\frac{dV}{dt} = \\pi (r^2 + h) \\frac{dr}{dt} \\)"],
+            ans: 1, type: "Lý thuyết",
+            exp: "Vì cả \(r\) và \(h\) đều là hàm theo \(t\), ta phải áp dụng Quy tắc nhân (Product Rule) kết hợp Chain Rule: \((uv)' = u'v + uv'\). Đạo hàm của \(r^2 h\) sẽ là \((2r r')h + r^2(h')\).",
+            tip: "Kiểm tra kỹ xem trong bài toán đại lượng nào là hằng số (thì giữ nguyên), đại lượng nào thay đổi (thì phải dùng quy tắc nhân)."
+        },
+        {
+            q: "Khi đọc đề, nếu thấy cụm từ \"đại lượng A đang thu hẹp\", \"đang bốc hơi\", hoặc \"đang giảm dần với tốc độ 5 cm/s\", ta phải thiết lập giá trị đạo hàm của nó như thế nào?",
+            options: ["\\( \\frac{dA}{dt} = 5 \\)", "\\( \\frac{dA}{dt} = 0 \\)", "\\( \\frac{dA}{dt} = -5 \\)", "\\( \\frac{dA}{dt} = \\frac{1}{5} \\)"],
+            ans: 2, type: "Lý thuyết",
+            exp: "Tốc độ thay đổi là một đại lượng có hướng. Nếu tăng lên (to ra, dài ra, đầy lên) thì mang dấu dương (+). Nếu giảm đi (thu hẹp, cạn đi, ngắn lại) thì mang dấu âm (-).",
+            tip: "Đọc kỹ động từ: Tăng/Đổ vào -> (+); Giảm/Bốc hơi/Rút ra -> (-)."
+        },
+        {
+            q: "Trong bài toán cái thang trượt dọc theo bức tường, mối liên hệ toán học thường được sử dụng nhất để liên kết các biến số là gì?",
+            options: ["Định lý Sin", "Định lý Cosin", "Định lý Pytago", "Công thức diện tích tam giác"],
+            ans: 2, type: "Lý thuyết",
+            exp: "Tường và mặt đất luôn tạo thành một góc vuông. Cái thang là cạnh huyền của tam giác vuông đó. Phương trình liên hệ chuẩn luôn là \( x^2 + y^2 = L^2 \) (với L là chiều dài thang).",
+            tip: "Bài thang trượt = Tự động viết ngay \( x^2 + y^2 = L^2 \)."
+        },
+
+        // BÀI TẬP DỄ (5 CÂU)
+        {
+            q: "Chu vi hình tròn là \( C = 2\\pi r \). Nếu bán kính \(r\) đang tăng với tốc độ \( 3\\text{ cm/s} \), hỏi chu vi đang tăng với tốc độ bao nhiêu?",
+            options: ["\\( 3\\pi \\text{ cm/s} \\)", "\\( 6\\pi \\text{ cm/s} \\)", "\\( 9\\pi \\text{ cm/s} \\)", "\\( 1.5\\pi \\text{ cm/s} \\)"],
+            ans: 1, type: "Bài tập - Dễ",
+            exp: "Đạo hàm 2 vế theo \(t\): \( \\frac{dC}{dt} = 2\\pi \\frac{dr}{dt} \). Thay \( \\frac{dr}{dt} = 3 \) vào, ta có \( \\frac{dC}{dt} = 2\\pi (3) = 6\\pi \\).",
+            tip: "Chu vi hình tròn là hàm bậc 1 của bán kính, nên tốc độ cũng chỉ gấp \(2\\pi\) lần."
+        },
+        {
+            q: "Cạnh \(x\) của một hình vuông đang tăng với tốc độ \( 2\\text{ m/s} \). Tốc độ tăng diện tích của hình vuông đó khi cạnh \( x = 5\\text{ m} \) là bao nhiêu?",
+            options: ["\\( 10 \\text{ m}^2\\text{/s} \\)", "\\( 20 \\text{ m}^2\\text{/s} \\)", "\\( 25 \\text{ m}^2\\text{/s} \\)", "\\( 4 \\text{ m}^2\\text{/s} \\)"],
+            ans: 1, type: "Bài tập - Dễ",
+            exp: "Diện tích \( A = x^2 \). Đạo hàm: \( \\frac{dA}{dt} = 2x \\frac{dx}{dt} \). Thay \( x=5 \) và \( \\frac{dx}{dt}=2 \) ta được \( \\frac{dA}{dt} = 2(5)(2) = 20 \).",
+            tip: "Đạo hàm của \(x^2\) là \(2x\), nhân thêm vận tốc của cạnh là xong."
+        },
+        {
+            q: "Bán kính \(r\) của một quả bóng bay hình cầu đang tăng với tốc độ \( 2\\text{ cm/s} \). Tốc độ tăng diện tích bề mặt bóng \( S = 4\\pi r^2 \) khi \( r = 10\\text{ cm} \) là?",
+            options: ["\\( 80\\pi \\text{ cm}^2\\text{/s} \\)", "\\( 160\\pi \\text{ cm}^2\\text{/s} \\)", "\\( 40\\pi \\text{ cm}^2\\text{/s} \\)", "\\( 320\\pi \\text{ cm}^2\\text{/s} \\)"],
+            ans: 1, type: "Bài tập - Dễ",
+            exp: "Đạo hàm 2 vế: \( \\frac{dS}{dt} = 8\\pi r \\frac{dr}{dt} \). Thay \( r=10, \\frac{dr}{dt}=2 \), ta có: \( \\frac{dS}{dt} = 8\\pi (10)(2) = 160\\pi \).",
+            tip: "Hạ số mũ 2 của \(r^2\) xuống nhân với 4 thành 8, thay số vào cực nhanh."
+        },
+        {
+            q: "Một điểm di chuyển dọc theo đồ thị của hàm số \( y = 3x + 2 \). Nếu hoành độ \(x\) đang tăng với tốc độ \( \\frac{dx}{dt} = 4 \\text{ đv/s} \), hỏi tung độ \(y\) đang thay đổi với tốc độ bao nhiêu?",
+            options: ["\\( 4 \\text{ đv/s} \\)", "\\( 12 \\text{ đv/s} \\)", "\\( 14 \\text{ đv/s} \\)", "\\( 7 \\text{ đv/s} \\)"],
+            ans: 1, type: "Bài tập - Dễ",
+            exp: "Lấy đạo hàm 2 vế phương trình \(y = 3x + 2\) theo \(t\): \( \\frac{dy}{dt} = 3\\frac{dx}{dt} + 0 \). Thay \( \\frac{dx}{dt} = 4 \) vào, \( \\frac{dy}{dt} = 3(4) = 12 \).",
+            tip: "Đối với đường thẳng, tốc độ \(dy/dt\) luôn bằng Hệ số góc (slope) nhân với tốc độ \(dx/dt\)."
+        },
+        {
+            q: "Thể tích khối lập phương được cho bởi \( V = x^3 \). Nếu cạnh \(x\) tăng \( 1\\text{ cm/s} \), hỏi tốc độ tăng thể tích khi \( x = 3\\text{ cm} \) là bao nhiêu?",
+            options: ["\\( 9 \\text{ cm}^3\\text{/s} \\)", "\\( 18 \\text{ cm}^3\\text{/s} \\)", "\\( 27 \\text{ cm}^3\\text{/s} \\)", "\\( 3 \\text{ cm}^3\\text{/s} \\)"],
+            ans: 2, type: "Bài tập - Dễ",
+            exp: "Đạo hàm: \( \\frac{dV}{dt} = 3x^2 \\frac{dx}{dt} \). Thay \( x=3 \) và \( \\frac{dx}{dt}=1 \), ta được: \( 3(3^2)(1) = 27 \).",
+            tip: "Nhớ bình phương cạnh \(x\) TRƯỚC rồi mới nhân 3 nhé."
+        },
+
+        // BÀI TẬP TRUNG BÌNH (5 CÂU)
+        {
+            q: "Một cái thang dài \( 10\\text{ m} \) tựa vào tường. Chân thang bị trượt ra xa với tốc độ \( 2\\text{ m/s} \). Vận tốc trượt xuống của đỉnh thang khi chân thang cách tường \( 6\\text{ m} \) là bao nhiêu?",
+            options: ["\\( 1.5 \\text{ m/s} \\)", "\\( -1.5 \\text{ m/s} \\)", "\\( -1.2 \\text{ m/s} \\)", "\\( 2 \\text{ m/s} \\)"],
+            ans: 1, type: "Bài tập - Trung bình",
+            exp: "Pytago: \( x^2+y^2=100 \\Rightarrow 2x x' + 2y y' = 0 \). Khi \(x=6\), ta tính được \(y=8\) (bộ số 6-8-10). Thay vào: \( 2(6)(2) + 2(8)y' = 0 \\Rightarrow 24 + 16y' = 0 \\Rightarrow y' = -1.5 \). Vận tốc trượt là âm vì nó trượt xuống.",
+            tip: "Luôn tìm cạnh còn lại bằng Pytago trước khi thay số vào đạo hàm."
+        },
+        {
+            q: "Một bình hình trụ tròn có bán kính đáy cố định \( r = 5\\text{ cm} \). Nước chảy vào bình với tốc độ \( 50\\pi \\text{ cm}^3\\text{/s} \). Tốc độ dâng lên của chiều cao mực nước \( h \) là:",
+            options: ["\\( 5 \\text{ cm/s} \\)", "\\( 10 \\text{ cm/s} \\)", "\\( 2 \\text{ cm/s} \\)", "\\( 2\\pi \\text{ cm/s} \\)"],
+            ans: 2, type: "Bài tập - Trung bình",
+            exp: "Thể tích \( V = \\pi r^2 h = 25\\pi h \). Đạo hàm: \( V' = 25\\pi h' \). Thay \( V' = 50\\pi \), ta có \( 50\\pi = 25\\pi h' \\Rightarrow h' = 2 \).",
+            tip: "Vì \(r\) của hình trụ không đổi, hãy thay ngay nó vào phương trình từ bước 1 để biểu thức siêu gọn gàng."
+        },
+        {
+            q: "Hai chiếc xe ô tô cùng rời ngã tư. Xe A chạy hướng Bắc với tốc độ \( 40\\text{ km/h} \), xe B chạy hướng Đông với tốc độ \( 30\\text{ km/h} \). Khoảng cách giữa hai xe tăng với tốc độ bao nhiêu?",
+            options: ["\\( 70 \\text{ km/h} \\)", "\\( 50 \\text{ km/h} \\)", "\\( 10 \\text{ km/h} \\)", "\\( 25 \\text{ km/h} \\)"],
+            ans: 1, type: "Bài tập - Trung bình",
+            exp: "Khoảng cách là cạnh huyền \( z^2 = x^2 + y^2 \). Nếu chúng đi từ cùng 1 điểm, \( x=30t \), \( y=40t \), \( z=50t \). Tốc độ đạo hàm \( \\frac{dz}{dt} \) chính là đạo hàm của \(50t\), tức là bằng \(50\\text{ km/h}\). Hoặc dùng \( 2zz' = 2xx' + 2yy' \).",
+            tip: "Bộ ba Pytago 30-40-50 thần thánh. Vận tốc xa nhau chính là cạnh huyền của tam giác tạo bởi 2 vectơ vận tốc."
+        },
+        {
+            q: "Bơm nước vào một bình nón (đáy hướng lên trên). Bán kính mặt đáy bình là \( R=5 \), chiều cao bình là \( H=10 \). Hãy biểu diễn bán kính mặt nước \( r \) theo chiều cao mực nước \( h \).",
+            options: ["\\( r = 2h \\)", "\\( r = h \\)", "\\( r = \\frac{h}{2} \\)", "\\( r = \\frac{h}{5} \\)"],
+            ans: 2, type: "Bài tập - Trung bình",
+            exp: "Sử dụng tính chất tam giác đồng dạng dọc theo mặt cắt của hình nón: \( \\frac{r}{R} = \\frac{h}{H} \\Rightarrow \\frac{r}{5} = \\frac{h}{10} \\Rightarrow r = \\frac{5}{10}h = \\frac{h}{2} \).",
+            tip: "Đây là bước \"nhập môn\" bắt buộc của mọi bài hình nón. Lập tỉ lệ \( \\frac{r}{h} = \\frac{R}{H} \)."
+        },
+        {
+            q: "Điểm di chuyển trên parabol \( y = x^2 \). Tại vị trí \( (2, 4) \), hoành độ đang thay đổi với \( \\frac{dx}{dt} = 3\\text{ cm/s} \). Hỏi tốc độ thay đổi của tung độ \( \\frac{dy}{dt} \)?",
+            options: ["\\( 6 \\text{ cm/s} \\)", "\\( 8 \\text{ cm/s} \\)", "\\( 12 \\text{ cm/s} \\)", "\\( 24 \\text{ cm/s} \\)"],
+            ans: 2, type: "Bài tập - Trung bình",
+            exp: "Đạo hàm hai vế: \( \\frac{dy}{dt} = 2x \\frac{dx}{dt} \). Thay \( x=2 \) và \( \\frac{dx}{dt}=3 \), ta có: \( \\frac{dy}{dt} = 2(2)(3) = 12 \).",
+            tip: "Nhớ lấy đúng giá trị tọa độ x (ở đây x=2) để thay vào, đừng nhầm với tọa độ y=4."
+        },
+
+        // BÀI TẬP KHÓ (5 CÂU)
+        {
+            q: "Bóng người: Một người cao \( 1.5\\text{ m} \) bước ra xa khỏi cột đèn cao \( 4.5\\text{ m} \) với tốc độ \( 2\\text{ m/s} \). Tốc độ \"DÀI RA\" của cái bóng \( s \) trên mặt đất là bao nhiêu?",
+            options: ["\\( 1 \\text{ m/s} \\)", "\\( 2 \\text{ m/s} \\)", "\\( 1.5 \\text{ m/s} \\)", "\\( 3 \\text{ m/s} \\)"],
+            ans: 0, type: "Bài tập - Khó",
+            exp: "Tam giác đồng dạng: \( \\frac{s}{1.5} = \\frac{x+s}{4.5} \\Rightarrow 4.5s = 1.5x + 1.5s \\Rightarrow 3s = 1.5x \\Rightarrow 2s = x \\Rightarrow s = \\frac{x}{2} \). Lấy đạo hàm: \( s' = \\frac{x'}{2} = \\frac{2}{2} = 1\\text{ m/s} \).",
+            tip: "Tốc độ DÀI RA của bóng là đạo hàm của \(s\). Tốc độ di chuyển ĐỈNH BÓNG sẽ là \(x' + s'\)."
+        },
+        {
+            q: "Camera quay tên lửa: Một tên lửa được phóng thẳng đứng lên cao với \( v = 2000\\text{ km/h} \). Một camera đặt cách bệ phóng \( 4\\text{ km} \) (theo chiều ngang) hướng theo tên lửa. Tính tốc độ thay đổi góc quay \( \\theta \) của camera khi tên lửa cao \( 3\\text{ km} \).",
+            options: ["\\( 400 \\text{ rad/h} \\)", "\\( 320 \\text{ rad/h} \\)", "\\( 500 \\text{ rad/h} \\)", "\\( 160 \\text{ rad/h} \\)"],
+            ans: 1, type: "Bài tập - Khó",
+            exp: "Liên hệ: \( \\tan\\theta = \\frac{y}{4} \). Đạo hàm: \( \\sec^2\\theta \\cdot \\frac{d\\theta}{dt} = \\frac{1}{4} \\frac{dy}{dt} \). Khi \(y=3\), cạnh huyền \(c=5 \\Rightarrow \\cos\\theta = 4/5 \\Rightarrow \\sec\\theta = 5/4 \\Rightarrow \\sec^2\\theta = 25/16\). Thay số: \( \\frac{25}{16} \\frac{d\\theta}{dt} = \\frac{1}{4}(2000) = 500 \\Rightarrow \\frac{d\\theta}{dt} = 500 \\cdot \\frac{16}{25} = 320 \).",
+            tip: "Sử dụng \( \\sec^2\\theta = 1/\\cos^2\\theta \). Cạnh huyền lúc đó là bộ số Pytago 3-4-5."
+        },
+        {
+            q: "Cát được đổ xuống tạo thành một đống cát hình nón, trong đó chiều cao luôn luôn bằng bán kính đáy (\( h = r \)). Bơm cát với tốc độ \( 30\\pi \\text{ cm}^3\\text{/s} \). Hỏi chiều cao tăng nhanh thế nào khi \( h = 3\\text{ cm} \)?",
+            options: ["\\( \\frac{10}{3} \\text{ cm/s} \\)", "\\( 10 \\text{ cm/s} \\)", "\\( 3.33\\pi \\text{ cm/s} \\)", "\\( \\frac{10}{9} \\text{ cm/s} \\)"],
+            ans: 0, type: "Bài tập - Khó",
+            exp: "Thể tích nón: \( V = \\frac{1}{3}\\pi r^2 h \). Thay \( r=h \Rightarrow V = \\frac{1}{3}\\pi h^3 \). Đạo hàm: \( V' = \\pi h^2 h' \). Thay số: \( 30\\pi = \\pi (3^2) h' \\Rightarrow 30 = 9h' \\Rightarrow h' = \\frac{30}{9} = \\frac{10}{3} \).",
+            tip: "Rút gọn số lượng biến trước khi đạo hàm là chìa khóa. Ở đây \(h=r\) nên thay ngay \(r\) bằng \(h\) vào \(V\)."
+        },
+        {
+            q: "Định lý Cosin: Hai con tàu rời bến theo hai hướng tạo một góc \( 60^\\circ \). Tàu A đi \( 20\\text{ km/h} \), Tàu B đi \( 30\\text{ km/h} \). Tốc độ khoảng cách thay đổi sau \( 1\\text{ h} \) là bao nhiêu? (Gợi ý: \( z^2 = x^2 + y^2 - 2xy\\cos(60) \))",
+            options: ["\\( 10\\sqrt{7} \\text{ km/h} \\)", "\\( 50 \\text{ km/h} \\)", "\\( 10\\sqrt{3} \\text{ km/h} \\)", "\\( 20\\sqrt{5} \\text{ km/h} \\)"],
+            ans: 0, type: "Bài tập - Khó",
+            exp: "Sau 1h: \( x=20, y=30 \), \( z^2 = 20^2+30^2 - 20(30) = 400+900-600=700 \\Rightarrow z = 10\\sqrt{7} \).<br> \( z^2 = x^2+y^2-xy \\Rightarrow 2zz' = 2xx' + 2yy' - (x'y + xy') \).<br>\( 2(10\\sqrt{7})z' = 2(20)(20) + 2(30)(30) - (20\\cdot 30 + 20\\cdot 30) = 800+1800-1200 = 1400 \).<br>\( z' = \\frac{1400}{20\\sqrt{7}} = \\frac{70}{\\sqrt{7}} = 10\\sqrt{7} \\approx 26.4 \).",
+            tip: "Đạo hàm của tích \((xy)'\) là \((x'y + xy')\), đừng quên dấu trừ phía trước do công thức Cosin."
+        },
+        {
+            q: "Một hình trụ đang biến dạng: bán kính \(r\) tăng \( 1\\text{ cm/s} \), trong khi chiều cao \(h\) lại giảm \( 2\\text{ cm/s} \). Hãy tính sự thay đổi thể tích \( \\frac{dV}{dt} \) tại thời điểm \( r=5\\text{ cm} \), \( h=10\\text{ cm} \).",
+            options: ["Thể tích tăng \( 50\\pi \\text{ cm}^3\\text{/s} \\)", "Thể tích giảm \( 50\\pi \\text{ cm}^3\\text{/s} \\)", "Thể tích không đổi", "Thể tích tăng \( 100\\pi \\text{ cm}^3\\text{/s} \\)"],
+            ans: 0, type: "Bài tập - Khó",
+            exp: "Chiều cao GIẢM nên \( h' = -2 \). Đạo hàm tích: \( V' = \\pi(2rr'h + r^2h') \). Thay số: \( V' = \\pi [2(5)(1)(10) + (25)(-2)] = \\pi [100 - 50] = 50\\pi \). Vì \(V'\) ra dương nên thể tích đang TĂNG.",
+            tip: "Bán kính tăng ảnh hưởng (\(r^2\)) mạnh hơn là sự sụt giảm của chiều cao, nên dù chiều cao giảm nhanh hơn, thể tích tổng vẫn tăng."
+        }
+    ];
+
+    let currentScore = 0;
+    let answeredQuestions = 0;
+
+    function renderQuiz() {
+        const container = document.getElementById("quiz-container");
+        let html = "";
+
+        quizData.forEach((item, qIndex) => {
+            let diffClass = "";
+            if(item.type.includes("Lý thuyết")) diffClass = "diff-Lý";
+            else if(item.type.includes("Dễ")) diffClass = "diff-Dễ";
+            else if(item.type.includes("Trung")) diffClass = "diff-Trung";
+            else if(item.type.includes("Khó")) diffClass = "diff-Khó";
+
+            html += `
+                <div class="question-box" id="qbox-${qIndex}">
+                    <div class="question-title">
+                        <span class="difficulty-badge ${diffClass}">${item.type}</span> 
+                        <br><br>Câu ${qIndex + 1}: ${item.q}
+                    </div>
+                    <div class="options">
+            `;
+
+            item.options.forEach((opt, oIndex) => {
+                html += `<div class="option" id="opt-${qIndex}-${oIndex}" onclick="checkAnswer(${qIndex}, ${oIndex})">
+                            <span style="margin-right:10px; font-weight:800;">${String.fromCharCode(65 + oIndex)}.</span> ${opt}
+                         </div>`;
+            });
+
+            html += `
+                    </div>
+                    <div class="feedback" id="feedback-${qIndex}">
+                        <h4><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> Lời giải chi tiết:</h4>
+                        <div class="exp-text">${item.exp}</div>
+                        <div class="tip"><strong>💡 Ghi nhớ nhanh:</strong> ${item.tip}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+        
+        // MathJax typeset
+        if (window.MathJax) {
+            MathJax.typesetPromise().catch((err) => console.log(err.message));
+        }
+    }
+
+    function checkAnswer(qIndex, oIndex) {
+        const box = document.getElementById(`qbox-${qIndex}`);
+        const opts = box.querySelectorAll('.option');
+        if (opts[0].classList.contains('disabled')) return;
+
+        const correctAns = quizData[qIndex].ans;
+
+        if (oIndex === correctAns) {
+            currentScore++;
+        }
+        answeredQuestions++;
+        
+        // Cập nhật điểm có hiệu ứng
+        const scoreBoard = document.getElementById('scoreBoard');
+        scoreBoard.innerText = `Điểm Của Bạn: ${currentScore} / 20`;
+        scoreBoard.style.transform = "scale(1.1)";
+        setTimeout(() => scoreBoard.style.transform = "scale(1)", 200);
+
+        opts.forEach((opt, idx) => {
+            opt.classList.add('disabled');
+            if (idx === correctAns) {
+                opt.classList.add('correct');
+            } else if (idx === oIndex && oIndex !== correctAns) {
+                opt.classList.add('wrong');
+            }
+        });
+
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+        feedback.style.display = 'block';
+        
+        if (window.MathJax) {
+            MathJax.typesetPromise([feedback]).catch((err) => console.log(err.message));
+        }
+    }
+
+    window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
